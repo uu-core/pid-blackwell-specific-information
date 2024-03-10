@@ -22,10 +22,10 @@ Example usage:
 
 from itertools import combinations, product
 from functools import reduce, cache
+from math import sqrt
 import numpy as np
 import pandas as pd
-from shapely.geometry import MultiPoint
-from math import sqrt
+from scipy.spatial import ConvexHull
 
 logBase = 2
 precision = 16
@@ -268,15 +268,20 @@ def BlackwellJoint_pw(pw_channel_list):
 			curve.append((np.array(p) + curve[-1]))
 		return np.array(curve)
 	#
-	def hullToChannel(hull):
-		hull = hull if 'LineString' in str(type(hull)) else hull.exterior 
-		cornerPoints = sorted(list(set(hull.coords)),key=lambda x: tuple(x)) 
+	def hullToChannel(hull_points):
+		cornerPoints = sorted(hull_points,key=lambda x: tuple(x))
 		channel, init = [], np.array([0,0])
 		for x in cornerPoints:
 			if np.any(x != init):
 				channel.append(np.array(x)-init)
 				init = np.array(x)
 		return np.array(channel).T.clip(0)
+	#
+	def myConvexHull(points):
+		if all([abs(a-b) < 10**(-precision) for a,b in points.tolist()]):
+			return np.array([[0,0],[1,1]])
+		else:
+			return np.unique(np.vstack([points[s] for s in ConvexHull(points).simplices]),axis=0)
 	#
 	def BlackwellJoint2(k1,k2):
 		prec = precision
@@ -287,7 +292,7 @@ def BlackwellJoint_pw(pw_channel_list):
 			k1,k2=np.round(k1,prec),np.round(k2,prec)
 			print(f' -> Warning, one pointwise channel is computed with lower precision ({prec}) due to a rounding issue.')
 		assert np.all(k1 >= 0.0) and np.all(k2 >= 0.0), f'invalid channel {k1} or {k2}'
-		return hullToChannel(MultiPoint(np.vstack((channelToPoints(k1),channelToPoints(k2)))).convex_hull)
+		return hullToChannel(myConvexHull(np.vstack((channelToPoints(k1),channelToPoints(k2)))).tolist())
 	#
 	bottom_element = np.array([[1],[1]])
 	return reduce(BlackwellJoint2, pw_channel_list, bottom_element)
