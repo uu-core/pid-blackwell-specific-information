@@ -1,10 +1,13 @@
 # Implementation: Partial Information Decomposition - Blackwell Specific Information
 
-This repository provides an implementation of the method and examples in:
+This repository provides...
+1. an implementation of the method and all examples/analyses in:
+    
+    _"Non-Negative Decomposition of Multivariate Information: from Minimum to Blackwell Specific Information"_ by T. Mages, E. Anastasiadi and C. Rohner (2024)
 
-_"Non-Negative Decomposition of Multivariate Information: from Minimum to Blackwell Specific Information"_ by T. Mages, E. Anastasiadi and C. Rohner (2024)
+2. a non-negative partial information decomposition of any f-information measure on both the redundancy and synergy lattice with their corresponding information flow analyses for Markov chains. The decomposition and flow analysis of Rényi-information can be obtained as transformation as described in the corresponding publication.
 
-_When using this implementation, please cite the [corresponding publication](https://www.preprints.org/manuscript/202403.0285)_.
+_When using this implementation, please cite the [corresponding publication (preprint)](https://www.preprints.org/manuscript/202403.0285)_.
 
 ## Overview
 - `demo.py`: provides a simple usage example
@@ -12,7 +15,9 @@ _When using this implementation, please cite the [corresponding publication](htt
 - `pid_implementation.py`: provides the implementation of the presented method and flow analysis
 - `chain_distributions.py`: provides a random markov chain and the used markov chain of the publication
 - `tests_pid.py`: compares the results between the redundancy and synergy lattice for PID examples (used for implementation testing)
-- `tests_pid.py`: compares the results between the redundancy and synergy lattice in information flow analyses (random or paper example; used for implementation testing)
+- `tests_flow.py`: compares the results between the redundancy and synergy lattice in information flow analyses (random or paper example; used for implementation testing)
+
+_**Requirements:**_ [NumPy](https://numpy.org/install/), [SciPy](https://scipy.org/install/) and [pandas](https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html).
 
 ## Interface
 `RedundancyLatticePID`/`SynergyLatticePID` take the followign arguments:

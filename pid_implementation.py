@@ -29,17 +29,18 @@ from scipy.spatial import ConvexHull
 
 logBase = 2
 precision = 16
-log = lambda x: np.log(x)/np.log(logBase) if abs(x) >= 10**(-precision) else 0
+log = lambda x: np.log(x)/np.log(logBase) if abs(x) >= 10**(-precision) else 0  # for convention 0*log(0) = 0 in 'KL' and 'JS' measures
 
 # List of f-divergence functions (available measure options):
+HD = lambda x,a: (x**a-1)/(a-1)										# Hellinger divergence (give 'a' constant value, the function shall only take one argument. See example below)
 f_options = {'KL': lambda x: x*log(x) ,								# Kullback–Leibler divergence
 			 'TV': lambda x: 0.5*abs(x-1) ,							# Total variation distance
 			 'C2': lambda x: (x-1)**2,								# (Pearson) \chi^2 divergence
 			 'H2': lambda x: (1-sqrt(x))**2,						# Squared Hellinger distance
 			 'LC': lambda x: (1-x)/(2*x+2),							# Le Cam distance
-			 'JS': lambda x: x*log((2*x)/(x+1)) + log(2/(x+1))}		# Jensen-Shannon divergence
-#			 'HD': lambda x,a: (x**a-1)/(a-1)}						# Hellinger divergence (use a constant 'a', we expect the function to take only one argument, see example below)
-#			 'HD-0.5': lambda x: (x**0.5-1)/(0.5-1)}				# Example for adding a new measure: Hellinger divergence with 'a=0.5' available under the name 'HD-0.5' when uncommenting.
+			 'JS': lambda x: x*log((2*x)/(x+1)) + log(2/(x+1)),		# Jensen-Shannon divergence
+			 #'HD-0.5': lambda x: HD(x,0.5),						# Example for adding a new measure: Hellinger divergence with 'a=0.5' is available under the name 'HD-0.5' when uncommenting this line.
+}
 
 
 ###############################################################
