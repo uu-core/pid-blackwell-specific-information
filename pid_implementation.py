@@ -279,10 +279,11 @@ def BlackwellJoint_pw(pw_channel_list):
 		return np.array(channel).T.clip(0)
 	#
 	def myConvexHull(points):
-		if all([abs(a-b) < 10**(-precision) for a,b in points.tolist()]):
+		points_unq = np.unique(np.round(points,precision-3),axis=0)
+		if all([abs(a-b) < 10**(-precision) for a,b in points_unq.tolist()]):
 			return np.array([[0,0],[1,1]])
 		else:
-			return np.unique(np.vstack([points[s] for s in ConvexHull(points).simplices]),axis=0)
+			return np.unique(np.vstack([points_unq[s] for s in ConvexHull(points_unq).simplices]),axis=0)
 	#
 	def BlackwellJoint2(k1,k2):
 		prec = precision
