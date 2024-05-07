@@ -25,7 +25,7 @@ from functools import reduce, cache
 from math import sqrt
 import numpy as np
 import pandas as pd
-from scipy.spatial import ConvexHull
+from scipy.spatial import ConvexHull, QhullError
 
 logBase = 2
 precision = 16
@@ -279,12 +279,16 @@ def BlackwellJoint_pw(pw_channel_list):
 		return np.array(channel).T.clip(0)
 	#
 	def myConvexHull(points):
-		points_unq = np.unique(np.round(points,precision-3),axis=0)
-		if all([abs(a-b) < 10**(-precision) for a,b in points_unq.tolist()]):
+		# some extra handling since scipy gives exception if the convex hull has single dimension (bottom element/diagonal)
+		points_unq = np.unique(np.round(points,precision-1),axis=0)
+		if all([abs(a-b) < 10**(-precision+2) for a,b in points_unq.tolist()]):
 			return np.array([[0,0],[1,1]])
 		else:
-			return np.unique(np.vstack([points_unq[s] for s in ConvexHull(points_unq).simplices]),axis=0)
-	#
+			try:
+				return np.unique(np.vstack([points_unq[s] for s in ConvexHull(points_unq).simplices]),axis=0)
+			except QhullError: # geometrical degeneracy case (bottom element)
+				return np.array([[0,0],[1,1]])
+		
 	def BlackwellJoint2(k1,k2):
 		prec = precision
 		k1,k2=np.round(k1,prec),np.round(k2,prec)
