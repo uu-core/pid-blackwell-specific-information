@@ -3,11 +3,11 @@
 This repository provides...
 1. an implementation of the method and all examples/analyses in:
     
-    _"Non-Negative Decomposition of Multivariate Information: from Minimum to Blackwell Specific Information"_ by T. Mages, E. Anastasiadi and C. Rohner (2024)
+    _Mages, T.; Anastasiadi, E.; Rohner, C. Non-Negative Decomposition of Multivariate Information: From Minimum to Blackwell-Specific Information. Entropy 2024. [https://doi.org/10.3390/e26050424](https://doi.org/10.3390/e26050424)_
 
 2. a non-negative partial information decomposition of any f-information measure on both the redundancy and synergy lattice with their corresponding information flow analyses for Markov chains. The decomposition and flow analysis of Rényi-information can be obtained as transformation as described in the corresponding publication.
 
-_When using this implementation, please cite the [corresponding publication (preprint)](https://www.preprints.org/manuscript/202403.0285)_.
+_When using this implementation, please cite the [corresponding publication](https://doi.org/10.3390/e26050424)_.
 
 ## Overview
 - `demo.py`: provides a simple usage example
